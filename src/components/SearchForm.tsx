@@ -1,4 +1,8 @@
-const SearchForm = ({ searchText, setSearchText }) => {
+type SearchFormProps = {
+  searchText: string;
+  setSearchText: (searchText: string) => void;
+};
+const SearchForm = ({ searchText, setSearchText }: SearchFormProps) => {
   return (
     <form
       onSubmit={(e) => {
