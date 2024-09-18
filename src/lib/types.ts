@@ -18,3 +18,14 @@ export type JobItemExpanded = JobItem & {
   companyURL: string;
   location: string;
 };
+
+export type JobItemResponse = {
+  public: boolean;
+  jobItem: JobItemExpanded;
+};
+
+export type JobItemsResponse = {
+  public: boolean;
+  sorted: boolean;
+  jobItems: Array<JobItem>;
+};
