@@ -112,7 +112,7 @@ export const useLocalStorage = <T>(
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
   }, [value, key]);
-  return [value, setValue] as const;
+  return [value, setValue];
 };
 
 export const useOnClickOutside = (
