@@ -1,5 +1,6 @@
-import { createContext } from "react";
-import { useLocalStorage } from "../lib/hooks";
+import { createContext, useContext } from "react";
+import { useJobItems, useLocalStorage } from "../lib/hooks";
+import { JobItemExpanded } from "../lib/types";
 type BookmarksContextProviderProps = {
   children: React.ReactNode;
 };
@@ -7,6 +8,8 @@ type BookmarksContextProviderProps = {
 type TBookmarksContext = {
   bookmarkedIds: number[];
   handleToggleBookmark: (id: number) => void;
+  bookmarkedJobItems: JobItemExpanded[];
+  isLoading: boolean;
 };
 
 export const BookmarksContext = createContext<TBookmarksContext | null>(null);
@@ -17,7 +20,7 @@ const BookmarksContextProvider = ({
     "bookmarkedIds",
     [],
   );
-
+  const [bookmarkedJobItems, isLoading] = useJobItems(bookmarkedIds);
   const handleToggleBookmark = (id: number) => {
     if (bookmarkedIds.includes(id)) {
       setBookmarkedIds((prev) => prev.filter((item) => item !== id));
@@ -31,6 +34,8 @@ const BookmarksContextProvider = ({
       value={{
         bookmarkedIds,
         handleToggleBookmark,
+        bookmarkedJobItems,
+        isLoading,
       }}
     >
       {children}
@@ -39,3 +44,13 @@ const BookmarksContextProvider = ({
 };
 
 export default BookmarksContextProvider;
+
+export const useBookmarksContext = () => {
+  const context = useContext(BookmarksContext);
+  if (!context) {
+    throw new Error(
+      "useContext(BookmarksContext) must be within a BookmarksContextProvider",
+    );
+  }
+  return context;
+};
