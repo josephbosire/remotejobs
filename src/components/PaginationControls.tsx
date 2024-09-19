@@ -49,7 +49,10 @@ const PaginationButton = ({
   return (
     <button
       className={`pagination__button pagination__button--${direction}`}
-      onClick={onClick}
+      onClick={(e) => {
+        onClick();
+        e.currentTarget.blur();
+      }}
     >
       {direction === "previous" ? (
         <>
