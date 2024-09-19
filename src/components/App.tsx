@@ -14,6 +14,7 @@ import SortingControls from "./SortingControls";
 import JobList from "./JobList";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "react-hot-toast";
+import { TDirection } from "../lib/types";
 
 function App() {
   const [searchText, setSearchText] = useState("");
@@ -21,7 +22,16 @@ function App() {
   const [jobItems, isLoading] = useJobItems(debouncedSearchText);
   const jobItemsSliced = jobItems.slice(0, 7);
   const totalNumberOfResults = jobItems.length;
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const handleChangePage = (direction: TDirection) => {
+    console.log("I have clicked", direction);
+    if (direction === "next") {
+      setCurrentPage((prev) => prev + 1);
+    } else if (direction === "previous") {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
   console.log(debouncedSearchText);
   return (
     <>
@@ -40,7 +50,10 @@ function App() {
             <SortingControls />
           </SidebarTop>
           <JobList isLoading={isLoading} jobItems={jobItemsSliced} />
-          <PaginationControls />
+          <PaginationControls
+            currentPage={currentPage}
+            onClick={handleChangePage}
+          />
         </Sidebar>
         <JobItemContent />
       </Container>

@@ -29,3 +29,5 @@ export type JobItemsResponse = {
   sorted: boolean;
   jobItems: Array<JobItem>;
 };
+
+export type TDirection = "next" | "previous";

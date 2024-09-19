@@ -3,6 +3,7 @@ import { JobItemResponse, JobItemsResponse } from "./types";
 import { API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { handleError } from "./utils";
 
 const fetchJobItem = async (id: number): Promise<JobItemResponse> => {
   const response = await fetch(`${API_URL}/${id}`);
@@ -31,9 +32,7 @@ export const useJobItem = (id: number | null) => {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: Boolean(id),
-      onError: (error) => {
-        console.log(error);
-      },
+      onError: handleError,
     },
   );
   const jobItem = data?.jobItem;
@@ -49,9 +48,7 @@ export const useJobItems = (searchText: string) => {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: Boolean(searchText),
-      onError: (error: Error) => {
-        toast.error(error.message);
-      },
+      onError: handleError,
     },
   );
   const jobItems = data?.jobItems || [];
