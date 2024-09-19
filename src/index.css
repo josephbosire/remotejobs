@@ -246,6 +246,7 @@ body::-webkit-scrollbar {
 .job-list {
   background-color: #fff;
   position: relative;
+  min-height: 140px;
   /* height: 100%; */
   flex: 1;
   display: flex;
@@ -511,7 +512,9 @@ body::-webkit-scrollbar {
   color: rgba(0, 0, 0, 0.9);
   caret-color: rgba(0, 0, 0, 0.5);
   background-color: rgba(255, 255, 255, 0.9);
-  transition: all 0.2s, box-shadow 0.1s;
+  transition:
+    all 0.2s,
+    box-shadow 0.1s;
 }
 
 .search input::selection {
@@ -637,7 +640,9 @@ body::-webkit-scrollbar {
   color: #747c82;
   background-color: #eceff2;
   cursor: pointer;
-  transition: all 0.2s, visibility 0s;
+  transition:
+    all 0.2s,
+    visibility 0s;
   gap: 2px;
   display: flex;
   align-items: center;

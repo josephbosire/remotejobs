@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { JobItemResponse, JobItemsResponse } from "./types";
+import { JobItemExpanded, JobItemResponse, JobItemsResponse } from "./types";
 import { API_URL } from "./constants";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
@@ -55,7 +55,7 @@ export const useJobItems = (ids: number[]) => {
   });
   const jobItems = results
     .map((result) => result.data?.jobItem)
-    .filter((item) => item !== undefined);
+    .filter((item) => item !== undefined) as JobItemExpanded[];
   const isLoading = results.some((result) => result.isLoading);
   return [jobItems, isLoading] as const;
 };
@@ -113,4 +113,21 @@ export const useLocalStorage = <T>(
     localStorage.setItem(key, JSON.stringify(value));
   }, [value, key]);
   return [value, setValue] as const;
+};
+
+export const useOnClickOutside = (
+  refs: React.RefObject<HTMLElement>[],
+  handler: () => void,
+) => {
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (refs.every((ref) => !ref.current?.contains(e.target as Node))) {
+        handler();
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [refs, handler]);
 };
