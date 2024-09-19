@@ -1,8 +1,7 @@
-type SearchFormProps = {
-  searchText: string;
-  setSearchText: (searchText: string) => void;
-};
-const SearchForm = ({ searchText, setSearchText }: SearchFormProps) => {
+import { useSearchTextContext } from "../contexts/SearchTextContextProvider";
+
+const SearchForm = () => {
+  const { searchText, handleChangeSearchText } = useSearchTextContext();
   return (
     <form
       onSubmit={(e) => {
@@ -17,7 +16,7 @@ const SearchForm = ({ searchText, setSearchText }: SearchFormProps) => {
 
       <input
         onChange={(e) => {
-          setSearchText(e.target.value);
+          handleChangeSearchText(e.target.value);
           console.log(e.target.value);
         }}
         spellCheck="false"

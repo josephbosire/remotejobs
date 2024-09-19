@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Background from "./Background";
 import Container from "./Container";
 import Footer from "./Footer";
@@ -11,45 +10,11 @@ import Sidebar, { SidebarTop } from "./Sidebar";
 import ResultsCount from "./ResultsCount";
 import PaginationControls from "./PaginationControls";
 import SortingControls from "./SortingControls";
-import JobList from "./JobList";
-import { useDebounce, useSearchQuery } from "../lib/hooks";
+
 import { Toaster } from "react-hot-toast";
-import { TDirection, TSortType } from "../lib/types";
-import { RESULTS_PER_PAGE } from "../lib/constants";
+import JobListSearch from "./JobListSearch";
 
 function App() {
-  const [searchText, setSearchText] = useState("");
-  const debouncedSearchText = useDebounce(searchText, 500);
-  const [jobItems, isLoading] = useSearchQuery(debouncedSearchText);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState<TSortType>("relevant");
-  const jobItemsSorted = [...jobItems].sort((a, b) => {
-    if (sortBy === "relevant") {
-      return b.relevanceScore - a.relevanceScore;
-    } else {
-      return a.daysAgo - b.daysAgo;
-    }
-  });
-  const jobItemsSliced = jobItemsSorted.slice(
-    currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
-    currentPage * RESULTS_PER_PAGE,
-  );
-  const totalNumberOfResults = jobItems.length;
-  const totalNumberOfPages = totalNumberOfResults / RESULTS_PER_PAGE;
-
-  const handleChangePage = (direction: TDirection) => {
-    if (direction === "next") {
-      setCurrentPage((prev) => prev + 1);
-    } else if (direction === "previous") {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
-  const handleChangeSortBy = (newSortBy: TSortType) => {
-    setSortBy(newSortBy);
-    setCurrentPage(1);
-  };
-
   return (
     <>
       <Background />
@@ -58,20 +23,16 @@ function App() {
           <Logo />
           <BookmarksButton />
         </HeaderTop>
-        <SearchForm searchText={searchText} setSearchText={setSearchText} />
+        <SearchForm />
       </Header>
       <Container>
         <Sidebar>
           <SidebarTop>
-            <ResultsCount totalNumberOfResults={totalNumberOfResults} />
-            <SortingControls sortBy={sortBy} onClick={handleChangeSortBy} />
+            <ResultsCount />
+            <SortingControls />
           </SidebarTop>
-          <JobList isLoading={isLoading} jobItems={jobItemsSliced} />
-          <PaginationControls
-            totalNumberOfPages={totalNumberOfPages}
-            currentPage={currentPage}
-            onClick={handleChangePage}
-          />
+          <JobListSearch />
+          <PaginationControls />
         </Sidebar>
         <JobItemContent />
       </Container>
