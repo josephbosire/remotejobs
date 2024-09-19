@@ -20,9 +20,10 @@ function App() {
   const [searchText, setSearchText] = useState("");
   const debouncedSearchText = useDebounce(searchText, 500);
   const [jobItems, isLoading] = useJobItems(debouncedSearchText);
-  const jobItemsSliced = jobItems.slice(0, 7);
-  const totalNumberOfResults = jobItems.length;
   const [currentPage, setCurrentPage] = useState(1);
+  const jobItemsSliced = jobItems.slice(currentPage * 7 - 7, currentPage * 7);
+  const totalNumberOfResults = jobItems.length;
+  const totalNumberOfPages = totalNumberOfResults / 7;
 
   const handleChangePage = (direction: TDirection) => {
     console.log("I have clicked", direction);
@@ -51,6 +52,7 @@ function App() {
           </SidebarTop>
           <JobList isLoading={isLoading} jobItems={jobItemsSliced} />
           <PaginationControls
+            totalNumberOfPages={totalNumberOfPages}
             currentPage={currentPage}
             onClick={handleChangePage}
           />
