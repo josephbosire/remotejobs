@@ -31,3 +31,5 @@ export type JobItemsResponse = {
 };
 
 export type TDirection = "next" | "previous";
+
+export type TSortType = "relevant" | "recent";

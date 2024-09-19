@@ -14,7 +14,7 @@ import SortingControls from "./SortingControls";
 import JobList from "./JobList";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "react-hot-toast";
-import { TDirection } from "../lib/types";
+import { TDirection, TSortType } from "../lib/types";
 import { RESULTS_PER_PAGE } from "../lib/constants";
 
 function App() {
@@ -22,14 +22,13 @@ function App() {
   const debouncedSearchText = useDebounce(searchText, 500);
   const [jobItems, isLoading] = useJobItems(debouncedSearchText);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState<"relevant" | "recent">("relevant");
-  const jobItemsSorted = jobItems.sort((a, b) => {
+  const [sortBy, setSortBy] = useState<TSortType>("relevant");
+  const jobItemsSorted = [...jobItems].sort((a, b) => {
     if (sortBy === "relevant") {
       return b.relevanceScore - a.relevanceScore;
-    } else if (sortBy === "recent") {
+    } else {
       return a.daysAgo - b.daysAgo;
     }
-    return 0;
   });
   const jobItemsSliced = jobItemsSorted.slice(
     currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
@@ -39,7 +38,6 @@ function App() {
   const totalNumberOfPages = totalNumberOfResults / RESULTS_PER_PAGE;
 
   const handleChangePage = (direction: TDirection) => {
-    console.log("I have clicked", direction);
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
     } else if (direction === "previous") {
@@ -47,8 +45,9 @@ function App() {
     }
   };
 
-  const handleChangeSortBy = (newSortBy: "recent" | "relevant") => {
+  const handleChangeSortBy = (newSortBy: TSortType) => {
     setSortBy(newSortBy);
+    setCurrentPage(1);
   };
   return (
     <>

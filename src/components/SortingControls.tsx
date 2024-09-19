@@ -1,6 +1,8 @@
+import { TSortType } from "../lib/types";
+
 type SortingControlsProps = {
-  onClick: (sortyBy: "relevant" | "recent") => void;
-  sortBy: "recent" | "relevant";
+  onClick: (sortyBy: TSortType) => void;
+  sortBy: TSortType;
 };
 
 export default function SortingControls({
